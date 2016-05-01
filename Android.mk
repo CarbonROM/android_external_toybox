@@ -383,6 +383,16 @@ LOCAL_POST_INSTALL_CMD := $(hide) $(foreach t,$(ALL_TOOLS),ln -sf toybox $(TARGE
 
 include $(BUILD_EXECUTABLE)
 
+toybox_links: $(TOYBOX_INSTLIST)
+toybox_links: TOYBOX_BINARY := $(TARGET_OUT)/bin/toybox
+toybox_links:
+	@echo -e ${CL_CYN}"Generate Toybox links:"${CL_RST} $$($(TOYBOX_INSTLIST))
+	@mkdir -p $(TARGET_OUT_EXECUTABLES) $(TARGET_OUT_OPTIONAL_EXECUTABLES)
+	$(hide) $(TOYBOX_INSTLIST) | grep -vFx -f <(tr ' ' '\n' <<< '$(TOYS_FOR_XBIN) $(TOYS_WITHOUT_LINKS)') | xargs -I'{}' ln -sf toybox '$(TARGET_OUT_EXECUTABLES)/{}'
+	$(hide) tr ' ' '\n' <<< '$(TOYS_FOR_XBIN)' | xargs -I'{}' ln -sf ../bin/toybox '$(TARGET_OUT_OPTIONAL_EXECUTABLES)/{}'
+
+
+# This is used by the recovery system
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := main.c
 LOCAL_CFLAGS := $(common_cflags)
