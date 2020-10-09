@@ -499,14 +499,14 @@ cc_binary {
 
 cc_binary {
     name: "toybox_vendor",
-    defaults: ["toybox-defaults", "toybox-defaults-symlinks],
+    defaults: ["toybox-defaults", "toybox-defaults-symlinks"],
     vendor: true,
 }
 
 cc_binary {
     name: "toybox_static",
     defaults: ["toybox-defaults"],
-    whole_static_libs: toybox_libraries + [
+    whole_static_libs: [
         "libbase",
         "libcgrouprc",
         "libcgrouprc_format",
